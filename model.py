@@ -394,8 +394,20 @@ def loop_fill_counts(n_matrix, data):
 
     return n_matrix
 
-# Step 47 - vectorize_counts_add_at (not yet solved)
-# TODO: implement
+# Step 47 - vectorize_counts_add_at
+import numpy as np
+
+def vectorize_counts_add_at(vocab_size, data):
+    """Build (V, V) bigram counts from a 1D id array using vectorized scatter-add."""
+    # TODO: allocate counts, then scatter-add 1 at each (data[:-1], data[1:]) pair
+    mat= np.zeros((vocab_size, vocab_size), dtype=int)
+    for i in range(len(data) - 1):
+        curr = data[i]
+        next = data[i + 1]
+
+        mat[curr, next] += 1
+
+    return mat
 
 # Step 48 - add_one_smoothing (not yet solved)
 # TODO: implement

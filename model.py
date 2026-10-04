@@ -131,8 +131,14 @@ def slice_column(arr, j):
     arra= np.array(arr).T
     return arra[j]
 
-# Step 16 - slice_subblock (not yet solved)
-# TODO: implement
+# Step 16 - slice_subblock
+import numpy as np
+
+def slice_subblock(arr, r0, r1, c0, c1):
+    """Return the sub-block arr[r0:r1, c0:c1] of a 2D array."""
+    # TODO: return the rectangular sub-block of arr bounded by rows [r0,r1) and cols [c0,c1).
+    arra= np.array(arr)
+    return arra[r0:r1, c0:c1]
 
 # Step 17 - elementwise_add (not yet solved)
 # TODO: implement

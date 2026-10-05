@@ -572,8 +572,14 @@ def forward_logits_lookup(w, ids):
 
     return np.dot(mat, w)
 
-# Step 63 - logits_to_probs_rowwise (not yet solved)
-# TODO: implement
+# Step 63 - logits_to_probs_rowwise
+import numpy as np
+
+def logits_to_probs_rowwise(logits):
+    # TODO: convert a (B, V) logits matrix into a row-wise probability matrix
+    exp = np.exp(logits - np.max(logits, axis=1, keepdims=True))
+
+    return exp/np.sum(exp, axis=1, keepdims=True)
 
 # Step 64 - gather_correct_token_probs (not yet solved)
 # TODO: implement

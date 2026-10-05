@@ -559,8 +559,18 @@ def observe_lookup_equivalence(w, ids):
 
     return {'onehot_result': onehot_result,'index_result': index_result}
 
-# Step 62 - forward_logits_lookup (not yet solved)
-# TODO: implement
+# Step 62 - forward_logits_lookup
+import numpy as np
+
+def forward_logits_lookup(w, ids):
+    """Return logits (B, V) by gathering rows of w at positions ids."""
+    # TODO: return the logits for a batch of token ids by direct row lookup into W.
+    mat= np.zeros((len(ids), w.shape[0]))
+
+    for i in range(len(ids)):
+        mat[i][ids[i]]= 1
+
+    return np.dot(mat, w)
 
 # Step 63 - logits_to_probs_rowwise (not yet solved)
 # TODO: implement

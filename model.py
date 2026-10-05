@@ -491,8 +491,19 @@ def sum_negative_log_probs(p_matrix, data):
 
     return ct
 
-# Step 56 - average_nll (not yet solved)
-# TODO: implement
+# Step 56 - average_nll
+import numpy as np
+
+def average_nll(p_matrix, data):
+    # TODO: return mean negative log likelihood per bigram over consecutive pairs in data.
+    ct= 0
+    for i in range(len(data)-1):
+        prev= data[i]
+        curr= data[i+1]
+
+        ct+= -np.log(p_matrix[prev][curr])
+
+    return ct/(len(data)-1)
 
 # Step 57 - initialize_w_random (not yet solved)
 # TODO: implement

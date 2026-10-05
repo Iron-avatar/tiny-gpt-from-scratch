@@ -534,8 +534,12 @@ def one_hot_encode_batch(ids, vocab_size):
 
     return mat
 
-# Step 60 - forward_logits_onehot (not yet solved)
-# TODO: implement
+# Step 60 - forward_logits_onehot
+import numpy as np
+
+def forward_logits_onehot(onehot, w_matrix):
+    # TODO: compute logits for the neural bigram model as the matrix product of one-hot inputs and W.
+    return np.dot(onehot, w_matrix)
 
 # Step 61 - observe_lookup_equivalence (not yet solved)
 # TODO: implement

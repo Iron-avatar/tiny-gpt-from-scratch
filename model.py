@@ -716,8 +716,17 @@ def linear_forward(x, w):
     # TODO: compute Y = X @ W and return {'y': Y, 'cache': {'x': x, 'w': w}}.
     return {'y': np.dot(x, w), 'cache': {'x': x, 'w': w}}
 
-# Step 75 - derive_dx_on_paper (not yet solved)
-# TODO: implement
+# Step 75 - derive_dx_on_paper
+def derive_dx_on_paper():
+    """Return notes deriving dL/dX = dY @ W.T for Y = X @ W."""
+    # TODO: return a multi-line string with the derivation and shape check
+    notes = (
+        "Y = X @ W\n"
+        "dL/dX = dY @ W.T\n"
+        "shapes: X (B, In), W (In, Out), dY (B, Out) -> dL/dX (B, In)"
+    )
+    
+    return notes
 
 # Step 76 - derive_linear_dw_on_paper (not yet solved)
 # TODO: implement

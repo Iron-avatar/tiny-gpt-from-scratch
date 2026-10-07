@@ -757,8 +757,13 @@ def linear_backward_dx(dy, cache):
 
     return np.dot(dy, w.T)
 
-# Step 78 - linear_backward_dw (not yet solved)
-# TODO: implement
+# Step 78 - linear_backward_dw
+def linear_backward_dw(dy, cache):
+    """Return dL/dW for a linear layer Y = X @ W."""
+    # TODO: compute the weight gradient using x from cache and the upstream dy
+    x = cache['x']
+
+    return np.dot(x.T, dy)
 
 # Step 79 - bias_add_forward (not yet solved)
 # TODO: implement

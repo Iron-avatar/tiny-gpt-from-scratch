@@ -753,7 +753,6 @@ def derive_linear_dw_on_paper():
 # Step 77 - linear_backward_dx
 def linear_backward_dx(dy, cache):
     # TODO: compute the gradient of the loss w.r.t. the linear layer input X given dy and cache
-    x = cache['x']
     w = cache['w']
 
     return np.dot(dy, w.T)

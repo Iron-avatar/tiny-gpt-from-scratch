@@ -1035,13 +1035,11 @@ import numpy as np
 def softmax_attention_weights(masked_scores):
     """Row-wise stable softmax over the last axis of (B, T, T) scores."""
     # TODO: apply numerically stable softmax along the last axis of masked_scores
-    shape = masked_scores.shape
-
-    scores_2d = masked_scores.reshape(-1, shape[-1])
+    scores_2d = masked_scores.reshape(-1, masked_scores.shape[-1])
 
     probs_2d = stable_softmax_2d_rowwise(scores_2d)
 
-    return probs_2d.reshape(shape)
+    return probs_2d.reshape(masked_scores.shape)
 
 # Step 108 - attention_weighted_values (not yet solved)
 # TODO: implement

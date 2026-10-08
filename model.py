@@ -916,11 +916,11 @@ def token_embedding_forward(token_ids, embedding_matrix):
         cache: dict with keys 'token_ids', 'vocab_size'
     """
     # TODO: look up the embedding row for each token id and build the cache
-    res=[]
+    out=[]
     for i in range(len(token_ids)):
-        res.append(forward_logits_lookup(embedding_matrix, token_ids[i]))
+        out.append(forward_logits_lookup(embedding_matrix, token_ids[i]))
 
-    return np.array(res), {
+    return np.array(out), {
         'token_ids': token_ids,
         'vocab_size': embedding_matrix.shape[0]
     }

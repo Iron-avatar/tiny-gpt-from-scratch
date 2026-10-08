@@ -925,8 +925,15 @@ def token_embedding_forward(token_ids, embedding_matrix):
         'vocab_size': embedding_matrix.shape[0]
     }
 
-# Step 94 - token_embedding_backward (not yet solved)
-# TODO: implement
+# Step 94 - token_embedding_backward
+import numpy as np
+
+def token_embedding_backward(d_out, cache):
+    # TODO: scatter-add d_out into a (vocab_size, d_model) dE using cache['token_ids'].
+    ids = cache['token_ids'].reshape(-1)
+    d_out = d_out.reshape(-1, d_out.shape[-1])
+    
+    return compute_dw_scatter_add(ids, d_out, cache['vocab_size'])
 
 # Step 95 - create_positional_embedding (not yet solved)
 # TODO: implement

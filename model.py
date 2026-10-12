@@ -1333,8 +1333,15 @@ def ffn_activation_forward(h1):
 
     return a1, cache
 
-# Step 133 - ffn_linear_two_forward (not yet solved)
-# TODO: implement
+# Step 133 - ffn_linear_two_forward
+def ffn_linear_two_forward(a1, w2, b2):
+    # TODO: project a1 (B, T, d_ff) down to (B, T, d_model) using w2 and b2, return h2 and cache
+    linear = linear_forward(a1, w2)
+    h2 = bias_add_forward(linear['y'], b2)
+    return {
+        'h2': h2['y'],
+        'cache': {'a1': a1, 'w2': w2}
+    }
 
 # Step 134 - ffn_backward (not yet solved)
 # TODO: implement

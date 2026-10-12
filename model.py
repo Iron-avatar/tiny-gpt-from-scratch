@@ -1304,8 +1304,16 @@ def multihead_reshape_transpose_backward(d_merged, shape_info):
 
     return d_merged.reshape(B, T, n_heads, d_head).transpose(0, 2, 1, 3)
 
-# Step 131 - ffn_linear_one_forward (not yet solved)
-# TODO: implement
+# Step 131 - ffn_linear_one_forward
+def ffn_linear_one_forward(x, w1, b1):
+    """First FFN linear: lift (B, T, d_model) up to (B, T, d_ff) and add bias."""
+    # TODO: apply the first FFN linear that expands d_model to d_ff
+    linear = linear_forward(x, w1)
+    h1 = bias_add_forward(linear['y'], b1)
+    return {
+        'h1': h1['y'],
+        'cache': {'w1': w1, 'x': x}
+    }
 
 # Step 132 - ffn_activation_forward (not yet solved)
 # TODO: implement

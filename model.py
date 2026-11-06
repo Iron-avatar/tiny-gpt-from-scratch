@@ -1437,7 +1437,6 @@ def attention_forward(x, attn_params):
     n_heads = attn_params['n_heads']
     head_dim = d_model // n_heads
 
-    # Q, K, V projections
     q = linear_forward(x, Wq)
     k = linear_forward(x, Wk)
     v = linear_forward(x, Wv)
@@ -1446,22 +1445,17 @@ def attention_forward(x, attn_params):
     K = k['y'].reshape(B, T, n_heads, head_dim).transpose(0, 2, 1, 3)
     V = v['y'].reshape(B, T, n_heads, head_dim).transpose(0, 2, 1, 3)
 
-    # Attention scores
     scores = np.matmul(Q, K.transpose(0, 1, 3, 2))
     scores = scores / np.sqrt(head_dim)
 
-    # Softmax
     scores = scores - np.max(scores, axis=-1, keepdims=True)
     weights = np.exp(scores)
     weights = weights / np.sum(weights, axis=-1, keepdims=True)
 
-    # Weighted values
     attended = np.matmul(weights, V)
 
-    # Merge heads
     merged = attended.transpose(0, 2, 1, 3).reshape(B, T, d_model)
 
-    # Output projection
     out = multihead_output_projection_forward(
         merged,
         attn_params['Wo'],
@@ -1486,15 +1480,12 @@ def attention_forward(x, attn_params):
 
 def ffn_forward(x, ffn_params):
 
-    # First linear layer
     out1 = ffn_linear_one_forward(
         x, ffn_params['w1'], ffn_params['b1']
     )
 
-    # ReLU activation
     a1, act_cache = ffn_activation_forward(out1['h1'])
 
-    # Second linear layer
     out2 = ffn_linear_two_forward(
         a1, ffn_params['w2'], ffn_params['b2']
     )

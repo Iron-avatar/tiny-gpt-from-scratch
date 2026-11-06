@@ -1426,8 +1426,121 @@ def pre_layernorm_sublayer_forward(x, ln_params, sublayer_fn, sublayer_params):
         }
     }
 
-# Step 138 - transformer_block_forward (not yet solved)
-# TODO: implement
+# Step 138 - transformer_block_forward
+def attention_forward(x, attn_params):
+    B, T, d_model = x.shape
+
+    Wq = attn_params['Wq']
+    Wk = attn_params['Wk']
+    Wv = attn_params['Wv']
+
+    n_heads = attn_params['n_heads']
+    head_dim = d_model // n_heads
+
+    # Q, K, V projections
+    q = linear_forward(x, Wq)
+    k = linear_forward(x, Wk)
+    v = linear_forward(x, Wv)
+
+    Q = q['y'].reshape(B, T, n_heads, head_dim).transpose(0, 2, 1, 3)
+    K = k['y'].reshape(B, T, n_heads, head_dim).transpose(0, 2, 1, 3)
+    V = v['y'].reshape(B, T, n_heads, head_dim).transpose(0, 2, 1, 3)
+
+    # Attention scores
+    scores = np.matmul(Q, K.transpose(0, 1, 3, 2))
+    scores = scores / np.sqrt(head_dim)
+
+    # Softmax
+    scores = scores - np.max(scores, axis=-1, keepdims=True)
+    weights = np.exp(scores)
+    weights = weights / np.sum(weights, axis=-1, keepdims=True)
+
+    # Weighted values
+    attended = np.matmul(weights, V)
+
+    # Merge heads
+    merged = attended.transpose(0, 2, 1, 3).reshape(B, T, d_model)
+
+    # Output projection
+    out = multihead_output_projection_forward(
+        merged,
+        attn_params['Wo'],
+        attn_params['bo']
+    )
+
+    return {
+        'y': out['out'],
+        'cache': {
+            'q': q['cache'],
+            'k': k['cache'],
+            'v': v['cache'],
+            'Q': Q,
+            'K': K,
+            'V': V,
+            'weights': weights,
+            'attended': attended,
+            'merged': merged,
+            'output_projection': out['cache']
+        }
+    }
+
+def ffn_forward(x, ffn_params):
+
+    # First linear layer
+    out1 = ffn_linear_one_forward(
+        x, ffn_params['w1'], ffn_params['b1']
+    )
+
+    # ReLU activation
+    a1, act_cache = ffn_activation_forward(out1['h1'])
+
+    # Second linear layer
+    out2 = ffn_linear_two_forward(
+        a1, ffn_params['w2'], ffn_params['b2']
+    )
+
+    return {
+        'y': out2['h2'],
+        'cache': {
+            'linear1': out1['cache'],
+            'activation': act_cache,
+            'linear2': out2['cache']
+        }
+    }
+
+def transformer_block_forward(x, block_params):
+    """Run one pre-LN Transformer block forward.
+
+    Args:
+        x: ndarray of shape (B, T, d_model).
+        block_params: dict with keys 'ln1', 'attn', 'ln2', 'ffn'.
+
+    Returns:
+        dict with 'y' (B, T, d_model) and 'cache' with keys
+        'attn_branch' and 'ffn_branch'.
+    """
+    # TODO: compose pre-LN attention sublayer then pre-LN FFN sublayer with residuals
+    attn_branch = pre_layernorm_sublayer_forward(
+        x,
+        block_params['ln1'],
+        attention_forward,
+        block_params['attn']
+    )
+
+    ffn_branch = pre_layernorm_sublayer_forward(
+        attn_branch['y'],
+        block_params['ln2'],
+        ffn_forward,
+        block_params['ffn']
+    )
+
+    return {
+        'y': ffn_branch['y'],
+        'cache': {
+            'attn_branch': attn_branch['cache'],
+            'ffn_branch': ffn_branch['cache']
+        }
+    }
 
 # Step 139 - transformer_block_backward (not yet solved)
 # TODO: implement
